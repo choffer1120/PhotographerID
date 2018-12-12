@@ -115,7 +115,7 @@
               Sections
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="nav-item nav-link" href="#intro">Introduction</a>
+              <a class="nav-item nav-link" href="#">Introduction</a>
               <a class="nav-item nav-link" href="#data">Data Collection</a>
               <a class="nav-item nav-link" href="#architecture">Model</a>
               <a class="nav-item nav-link" href="#preproccess">Pre-Processing</a>
@@ -123,7 +123,7 @@
               <a class="nav-item nav-link" href="#results">Results</a>
               <a class="nav-item nav-link" href="#demo">Demo</a>
               <a class="nav-item nav-link" href="#filter">Analysis</a>
-              <a class="nav-item nav-link" href="#concluion">Conclusion</a>
+              <a class="nav-item nav-link" href="#conclusion">Conclusion</a>
             </div>
           </li>
 
@@ -287,6 +287,13 @@
       <div class="row" id="training" style="padding-top: 150px">
         <div class="col-md-12">
           <h2>Training Details</h2>
+          <p>
+              Optimizer and hyperparameters are other factors that determine the model’s performance and convergence time.
+              Stochastic Gradient Descent (SGD) is the classical optimizer used for many machine learning purposes, however, better optimizers have popped up recently which achieve better performance and convergence times than SGD can do.
+              In particular, we used Adam, an adapative optimizer instead of SGD, as Adam tends to be able to converge quicker which was important for us with our limited time to train during the project.
+              On models where we did started with pretrained weights, low learning rates like 0.00001 worked the best whereas when training models from scratch, starting with learning rates like 0.0005 and reducing it with time helped best with the performance.
+              Using these parameters, training converged after around 40 epochs. However, we let the training continue for 80 epochs (at an even smaller learning rate with 24 ysers) to make the model predictions more stable since the predictions fluctuated a lot around around 40 epochs.
+          </p>
         </div>
       </div>
 
@@ -356,9 +363,28 @@
       </div>
 
 
-      <div class="row" id="conclusion" style="padding-top: 150px">
+      <div class="row" id="conclusion" style="padding-top: 150px; padding-bottom: 100px">
         <div class="col-md-12">
           <h2>Conclusion</h2>
+          <p>
+            Per the validation results of our model, we can safely say our model has done a good job in learning the photographic styles of various Instagram photographers.
+            While accounts that feature distinguishable objects (like @loki the wolfdog) score very well during validation, we were impressed with how well the various disciplines all performed, whether it be landscape, wildlife or lifestyle.
+            As shown above earlier, the fact our model could learn the single account behind photos in different domains, such as a landscape photographers close up of a bird, provides strong evidence that the model has learned components of photographic style outside of the subject, which was the core goal of our project.
+          </p>
+          <br /><br />
+          <h6>Moving Forward</h6>
+          <p>
+            Furthermore, the imperfections in our predictive model do not represent outright flaws, but rather, a valuable tool for comparing work of various artists.
+            This creates a potential where image recommendation systems can built around photographer style similarities, rather then metadata like location and follower relations.
+            <br /><br />
+            This is a small and yet intriguing step in realizing that neural networks can learn on styles as well as distinct objects.
+            However, a lot can be done to expand and build on this result. For one, the performance of this model can still be increased to get better accuracy.
+            Secondly, the resulting model can be converted into an API for professional use, to be able to identify photographers without having to know the inner machinery.
+            Finally, this result can tell us a lot more about how neural networks behave.
+            Deep Convolutional Neural Networks seem to be very good at learning lots of inate characteristics, but our current understanding of how neural nets work is still limited.
+            The fact that neural nets can learn on style can be analyzed further to understand their working mechanisms.
+          </p>
+
         </div>
       </div>
 
