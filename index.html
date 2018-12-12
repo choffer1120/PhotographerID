@@ -9,6 +9,92 @@
       h2{
         margin-bottom: 24px;
       }
+      .cmEl{
+        		height: 100%;
+        		width: 100%;
+        		padding: 5px;
+        		float: left;
+        		box-sizing: border-box;
+        	}
+
+        	.cmRow{
+        		border-bottom: 1px solid rgb(220, 220, 220);
+        		box-sizing: border-box;
+        	}
+
+        	.cmEl{
+        		border-right: 1px solid rgb(220, 220, 220);
+        		box-sizing: border-box;
+        	}
+
+            .cmEl:hover{
+                background-color: rgba(200, 200, 200, .2);
+                cursor: pointer;
+            }
+
+        	.cmElImg{
+        		float: left;
+        		border: 0.5px solid transparent;
+        		box-sizing: border-box;
+        	}
+
+        	#cm_actual_axis{
+        		width: 150px;
+        		height: 100%;
+        		float:left;
+        	}
+
+        	#cm_actual_axis_title{
+        		text-transform: rotate(90deg);
+        	}
+
+        	.actualLabel span{
+        		float: right;
+        		margin-right: 12px;
+                font-size: 12px;
+                font-weight: 600;
+        	}
+
+        	#cm_predicted_axis{
+        		margin-top: 48px;
+        		float: left;
+        	}
+
+        	.predictedLabel{
+        		float: left;
+                text-align: right;
+                font-size: 12px;
+                font-weight: 600;
+        	}
+
+        	.predictedLabel span{
+                display: block;
+        		transform: rotate(-90deg);
+        	}
+
+            .modal-lg{
+                max-width: 90%;
+            }
+
+
+
+            .modal-content{
+                padding: 24px;
+            }
+
+            .modal h5{
+              font-weight: 400;
+            }
+
+            .modal h5 span{
+                font-weight: 700;
+            }
+
+            .modal-cmElImg{
+                height: 40px;
+                width: 40px;
+                padding: 2px;
+            }
     </style>
   </head>
 
@@ -160,13 +246,38 @@
 
       <div class="row" id="preproccess" style="padding-top: 150px">
         <div class="col-md-3 ">
-
+          <img src="siteAssets/preproccess.png" style="width:100%; margin-top:200px"  />
         </div>
 
-        <div class="col-md-8 offset-md-1">
+        <div class="col-md-9">
           <h2>Image Pre-Processing and Augmentation</h2>
           <p>
+            Data preprocessing and augmentation certainly play a big role in determining the performance and the effectiveness of machine learning algorithms.
+            Our preprocessing step involved preparing our training and validation sets for our model.
+            That was done by randomly choosing 85% of the images (for each class) as training data and 15% as validation data.
+            The images were resized from 650×650 to 350×350 since our ConvNet models could be trained much faster with smaller images without much loss in accuracy.
+            Then, each image was converted into a numpy array of dimensions 350×350×3 (3 for the number of channels in each image).
+            The training set was represented by two numpy arrays, X which was the array of image instances (each instance itself a 350×350×3 array) and Y which was the array of labels corresponding to image instances of X (one hot vectors).
+            The validation set was created in a similar way. The training and validation sets were stored as h5 files and could be loaded quickly before training.
+            <br /><br />
 
+            Data augmentations were another essential part of building our photographer identifier.
+            We tried a bunch of data augmentations among which two helped the models the best: horizontal flip and random zoom.
+            Horizontal flip does exactly what is sounds like flipping the image horizontally so that the model does not learn have an orientation bias.
+            Orientation bias might occur when, for example, you train your “Mountain” class with the images of mountains which all happen to be on the left side of the image.
+            Now, if this model is told to classify an image of a mountain where the mountain is on the right, it’s not hard to see how it can misclassify since it has never really seen an image with a mountain on the left.
+            Random zoom, again like the name suggests, zooms randomly to some part of the image and creates a new instance with the same label as the original image instance.
+            Random zoom allows us to increase the number of training images we have with very minor edits, keeping the almost all of the original style intact.
+
+            <br /><br />
+
+            Finally, we used another pre-processing technique, ZCA whitening, on the image batches before training.
+            ZCA is an elegant statistical tool used to decorrelate data instances.
+            It is very similar to principal component analysis (PCA), it’s more famous cousin.
+            Here is how PCA and ZCA work, given a bunch of data points (each image being a data point in our case) plotted in their high dimensional hyperspace, PCA identifies the principal directions along which the data varies the most
+            ZCA whitening is the extension of PCA in that it takes those principal directions and rescales the data values “along each principal direction” such that the variance along all principal directions is 1.
+            The entire process can of thought of as decorrelation, i.e. the similarities between the image instances have been suppressed leaving the differences.
+            This means the model can better identify the “differences” between the instances and easily pick on those differences, while not learning redundant information from other data instances.
           </p>
         </div>
       </div>
@@ -190,8 +301,50 @@
       <div class="row" id="demo" style="padding-top: 150px">
         <div class="col-md-12">
           <h2>Confusion Matrix Demo</h2>
-          <h6>10 Users (24 User was too slow with the javascript)</h6>
+          <h6>10 Users (24 User was too slow with the javascript and killed the site *sadface*)</h6>
+          <br /><br />
 
+          <div id="cm_container">
+        		<div style="float: left; margin-top: 10px;">
+        			<div id="cm_actual_axis">
+    	    			<!-- <div id="cm_actual_axis_title">Actual Instagram Account</div> -->
+    	    			<div id="cm_actual_axis_labels"></div>
+    	    		</div>
+    	    		<div id="confusion_matrix" style="float: left; border-left: 3px solid black; border-bottom: 3px solid black"></div>
+                    <div id="cm_predicted_axis">
+
+                    <div id="cm_predicted_axis_labels"></div>
+                    <div id="cm_actual_axis_title" style="text-align:center; margin-top:60px">Predicted Instagram Account</div>
+                </div>
+        		</div>
+
+
+        	</div>
+
+            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>Predicted Photographer: <span id="modal-pred-label"></span></h5>
+                            <div id="modal-cmEl-pred"></div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h5>Missed Predictions:</h5>
+                            <div id="modal-cmEl-missed"></div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h5>True Photographer: <span id="modal-true-label"></span></h5>
+                            <div id="modal-cmEl-true"></div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
       </div>
 
@@ -216,8 +369,129 @@
 
 
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+              <script src="prediction_json.json"></script>
+    	<script>
+    		classes = ["airpixels",
+                        "fursty",
+                        "shortstache",
+                        "haakeaulana",
+                        "thiswildidea",
+                        "loki",
+                        "hannes_becker",
+                        "danielkordan",
+                        "cestmaria",
+                        "jessfindlay"]
+
+            console.log(predictions.length)
+    //   classes = ["airpixels",
+    // "fursty",
+    // "shortstache",
+    // "cschoonover",
+    // "thiswildidea",
+    // "loki",
+    // "helloemilie",
+    // "danielkordan",
+    // "cestmaria",
+    // "jessfindlay",
+    // "aaronbhall",
+    //       "adrienneraquel",
+    //       "alexstrohl",
+    //       "CristinaMittermeier",
+    //       "dudelum",
+    //       "edkashi",
+    //       "elliepritts",
+    //       "emmett_sparling",
+    //       "garethpon",
+    //       "haakeaulana",
+    //       "hannes_becker",
+    //       "hirozzzz",
+    //       "jasoncharleshill",
+    //       "kelianne"
+    //       ]
+
+    		function create_cm_element(row, col, rowHeight, elWidth, cellId, label){
+
+
+    			const imgsPerRow = 12;
+
+    			const elImgHeight = (rowHeight - 10) / 12;
+    			const elImgWidth = elImgHeight;
+
+    			document.getElementById(cellId).innerHTML += '<img src="val_images/val-'+label+'.jpg" class="cmElImg" style="height: ' + elImgHeight +'; width: ' + elImgWidth + '"></div>';
+
+    			// document.getElementById(cmElId).style.backgroundColor = 'rgba(180,180,180,' + (document.getElementById(cmElId).childElementCount/144) + ')'
+    		}
+
+            let numberClasses = 10;
+
+    		document.getElementById('confusion_matrix').style.height = 0.80 * screen.height;
+    		document.getElementById('confusion_matrix').style.width = 0.80 * screen.height + numberClasses;
+
+    		const cm_row = '<div class="cmRow"></div>'
+
+    		for (i=0; i<numberClasses; i++) {
+    			console.log(i)
+    			let row_id = 'cm_row_' + i;
+    			let rowHeight = (0.80 * screen.height * (1/numberClasses));
+    			let elWidth = rowHeight
+    			document.getElementById('confusion_matrix').innerHTML += ('<div class="cmRow" id="' + row_id + '" style="height: ' + rowHeight +'"></div>');
+
+
+
+    			for (j=0; j<numberClasses; j++) {
+    				let cmElId = 'cm_el_' + i + '_' + j;
+                    let coord = i + '_' + j;
+	    			let cmEl = '<div class="cmEl" id="' + cmElId + '" style="height: ' + rowHeight +'; width: ' + elWidth + '" onclick="cellSelect('+i+', '+j+')" data-toggle="modal" data-target=".bd-example-modal-lg"></div>';
+	    			document.getElementById(row_id).innerHTML += cmEl
+    			}
+
+    			document.getElementById('cm_actual_axis_labels').innerHTML += '<div class="actualLabel" style="height: '+rowHeight+'"><span style="margin-top: ' + ((rowHeight/3)) + '">'+classes[i]+'</span></div>'
+
+    			document.getElementById('cm_predicted_axis_labels').innerHTML += '<div class="predictedLabel" style="width: '+rowHeight+'"><span>'+classes[i]+'</span></div>'
+    		}
+
+
+    		for (x=0; x<predictions.length; x++){
+    			label = predictions[x].label
+    			trueLabel = predictions[x].true
+    			predictedLabel = predictions[x].predictions
+
+    			let rowHeight =(0.80 * screen.height * (1/numberClasses))
+    			let elWidth = rowHeight
+    			let cellId = 'cm_el_' + trueLabel + '_' + predictedLabel;
+
+    			create_cm_element(trueLabel, predictedLabel, rowHeight, elWidth, cellId, label);
+    		}
+
+    		function cellSelect(trueLabel, pred){
+                document.getElementById('modal-cmEl-true').innerHTML = ''
+                document.getElementById('modal-cmEl-missed').innerHTML = ''
+                document.getElementById('modal-cmEl-pred').innerHTML = ''
+
+                document.getElementById('modal-true-label').innerText = classes[trueLabel]
+                document.getElementById('modal-pred-label').innerText = classes[pred]
+
+
+                for (x=0; x<predictions.length; x++){
+                    if (predictions[x].true == pred) {
+                        document.getElementById('modal-cmEl-pred').innerHTML += '<img src="val_images/val-'+predictions[x].label+'.jpg" class="modal-cmElImg"></div>';
+                    }
+
+
+                    if (predictions[x].true == trueLabel && predictions[x].predictions == pred && trueLabel != pred) {
+                        document.getElementById('modal-cmEl-missed').innerHTML += '<img src="val_images/val-'+predictions[x].label+'.jpg" class="modal-cmElImg"></div>';
+                    }
+
+                    if (predictions[x].true == trueLabel) {
+                        document.getElementById('modal-cmEl-true').innerHTML += '<img src="val_images/val-'+predictions[x].label+'.jpg" class="modal-cmElImg"></div>';
+                    }
+                }
+
+    		}
+
+    	</script>
   </body>
 </html>
