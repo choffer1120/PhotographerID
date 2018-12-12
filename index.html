@@ -1,0 +1,223 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <style>
+      img{
+        box-sizing: border-box;
+      }
+
+      h2{
+        margin-bottom: 24px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Photographer ID with Deep Learning</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav form-inline ml-auto" >
+
+
+
+
+          <li class="nav-item dropdown" style="margin-right: 24px">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Sections
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="nav-item nav-link" href="#intro">Introduction</a>
+              <a class="nav-item nav-link" href="#data">Data Collection</a>
+              <a class="nav-item nav-link" href="#architecture">Model</a>
+              <a class="nav-item nav-link" href="#preproccess">Pre-Processing</a>
+              <a class="nav-item nav-link" href="#training">Training</a>
+              <a class="nav-item nav-link" href="#results">Results</a>
+              <a class="nav-item nav-link" href="#demo">Demo</a>
+              <a class="nav-item nav-link" href="#filter">Analysis</a>
+              <a class="nav-item nav-link" href="#concluion">Conclusion</a>
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/choffer1120/PhotographerID"><button class="btn btn-sm btn-outline-secondary">Source Code</button></a>
+          </li>
+
+
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row" id="intro" style="margin-top: 150px">
+          <div class="col-md-4">
+            <div class="row">
+              <div class="col-md-4" style="padding: 0"><img src="siteAssets/airpixels-220.jpg" style="width:100%; padding: 5px"/></div>
+              <div class="col-md-4" style="padding: 0"><img src="siteAssets/alexstrohl-393.jpg" style="width:100%; padding: 5px"/></div>
+              <div class="col-md-4" style="padding: 0"><img src="siteAssets/cestmaria-40.jpg" style="width:100%; padding: 5px"/></div>
+              <div class="col-md-4" style="padding: 0"><img src="siteAssets/danielkordan-11.jpg" style="width:100%; padding: 5px"/></div>
+              <div class="col-md-4" style="padding: 0"><img src="siteAssets/fursty-264.jpg" style="width:100%; padding: 5px"/></div>
+              <div class="col-md-4" style="padding: 0"><img src="siteAssets/jasoncharleshill-72.jpg" style="width:100%; padding: 5px"/></div>
+              <div class="col-md-4" style="padding: 0"><img src="siteAssets/jessfindlay-224.jpg" style="width:100%; padding: 5px"/></div>
+              <div class="col-md-4" style="padding: 0"><img src="siteAssets/loki-61.jpg" style="width:100%; padding: 5px"/></div>
+              <div class="col-md-4" style="padding: 0"><img src="siteAssets/thiswildidea-256.jpg" style="width:100%; padding: 5px"/></div>
+              <div class="col-md-4" style="padding: 0"><img src="siteAssets/paulnicklen-237.jpg" style="width:100%; padding: 5px"/></div>
+              <div class="col-md-4" style="padding: 0"><img src="siteAssets/shortstache-563.jpg" style="width:100%; padding: 5px"/></div>
+              <div class="col-md-4" style="padding: 0"><img src="siteAssets/garethpon-362.jpg" style="width:100%; padding: 5px"/></div>
+            </div>
+          </div>
+
+          <div class="col-md-7 offset-md-1">
+              <h1>Identifying Instagram Photographers with Deep Learning</h1>
+              <br />
+              <h6 style="color:rgb(100,100,100)">Final Project for MIT's 6.s198: Deep Learning Practicum (Fall '18)</h6>
+              <p>
+                <br /><br />
+                The goal of our 6.s198 Final Project was to build and train a deep learning model to learn the indiviudal photographic styles of popular instagram photographers.
+                In order to learn "photographic style", the model needs to be able to relate subject, composition, color space, post-processing work, lighting, etc. to particular photographers.
+                Learning style in addition to substance is a probelm that really hasn't been tackled before, as most machine learning image work focuses on object detection.
+                Thus, we hope the relative success of our project highlights the ability for deep learning models to learn more complex image information then has been explored thus far.
+                <br /><br />
+              </p>
+              <p style="color: rgb(100,100,100); font-size: 14px"><i>Completed by Cole Hoffer and Bibek Pandit</i></p>
+          </div>
+      </div>
+
+
+
+
+      <div class="row" id="data" style="padding-top: 150px">
+          <div col-md-12>
+            <h2>Data Collection</h2>
+            <p>
+              Each image is 650x650 pixels and about 50kb on average.
+              We scraped 750 images from 62 individual instagram photographer accounts.
+              In my research and experience, the general number of photos on a popular and professional account was around a thousand, so we chose to use the 750 most recent posts per photographer in order to have a standard number of posts.
+              There were also cases where a particular account was a “personal” one in the beginning, and then transitioned into one of professional photography, so choosing the most recent 750 allowed us to make sure we were only getting the professional quality images.
+              In terms of labels, there is only one label/category for each image, which is the photographers instagram username.
+              That username is stored in the filename (“colehoffer-234.png”) as well as it’s sub-directory.
+              <br /><br />
+              Unfortunately, Instagram has a very limited API (that is shutting down in the near future), so we had to be creative and write our own scripts to collect the image data.
+              To do this, I used Selenium, a web browser automation python library to first scroll to the very bottom of a photographers account on Instagrams desktop site.
+              I then extracted the html and parsed for the 750 thumbnail image sources using Selenium's web parsing tools.
+              Once I had the urls, I could simply run “urllib.request.urlretrieve(...)” to save the download the images locally.
+              <br /><br />
+              The images are publicly available to viewing and downloading, we just could not use them in any commercial application since they are technically owned by Instagram.
+              <br /><br />
+              It is worth noting that the automation of the scrolling was a bit finicky, and thus, to collect images from 60 users, I had to run the script 4 or 5 times (removing the accounts that worked each iteration).
+            </p>
+
+            <p>
+                I (Cole) personally chose the accounts used for our model. I looked for photographers from a diverse set of arenas, including landscape, wildlife, lifestyle and portrait.
+                I then specifically looked at accounts that were popular (most had over 100k followers), as well as over a thousand posts so the 750 we did pull were likely to be professionaly shot/branded.
+            </p>
+
+            <p>
+              The nice thing about the pulling the images from the thumbnails was that they were individually small in size (around 50kb each on average).
+              Thus, even looking at 25 separate photographers only requires about 1.4GB total. So we can reasonably store the image data on our local machines before transerfing them to the <b>cloud</b>.
+            </p>
+            <br />
+
+            <button type="button" class="btn btn-sm btn-outline-secondary">Data Collection Code</button>
+        </div>
+      </div>
+
+
+
+
+      <div class="row" id="architecture" style="padding-top: 150px">
+        <div class="col-md-8">
+          <h2>Deep Learning Model Architecture</h2>
+          <p>
+            Finding an appropriate model architecture was one of the most challenging but important steps for this project.
+            In the field of object recognition (CIFAR, ImageNet), the best performing architectures are convultional neural networks that having becoming deeper and deeper the past few years.
+            While our project is not a pure object detection problem, we still need the ability to utilize a lot of data in our model, thus we used the already designed architectures as our starting point.
+            <br /><br />
+            We ended up testing 3 main architectures (and their variations) and concluded that the <b>ResNet 50</b> architecture was best suited for our needs.
+            The key difference between ResNet and the other architectures is the residual abilities of ResNet (short for residual network).
+            In effect, each block of 2 convultional layers has an addition residual path to the next block.
+            This allows the model to essentially skip over layers if they become detrimental to overall accuracy of the training, which becomes a prevelant problem when creating deeper and deeper models.
+            ResNet has many length variations (18, 34, 50, 101, 152), and after trying a couple we settled on the 50 layer deep version, as it performed as well as any version with more layers but was quicker to train.
+            <br /><br />
+            Thankfully, ResNet-50 was one of the architectures available for direct import from the Keras API, so that helped save a lot of time.
+            From this point, we had to decide how much we wanted to lean on transfer learn, and in particular the final weights for ResNet-50 when trained on the ImageNet database (an object detection dataset).
+            Because our model needed to learn stylistic information in addition to the subject, we knew we need be training the entire model, so the classic transfer learning case of just switching the last fully connected layer was off the table.
+            From there, we decided it would be best to start our training from the pretrained weights, as it gave our model a good head start, especially with users specializing in wildlife photography and landscape photography, where learning the shapes of particular landscapes is important.
+            We did test these intuitions as well, and they were confirmed, as the fully-trainable model, starting with ImageNet weights, was by far the most succesful model during training.
+          </p>
+        </div>
+
+        <div class="col-md-3 offset-md-1">
+          <img src="siteAssets/resnet.jpeg" style="width:60%; margin-left:20%; margin-top:100px"/>
+        </div>
+      </div>
+
+
+
+
+
+      <div class="row" id="preproccess" style="padding-top: 150px">
+        <div class="col-md-3 ">
+
+        </div>
+
+        <div class="col-md-8 offset-md-1">
+          <h2>Image Pre-Processing and Augmentation</h2>
+          <p>
+
+          </p>
+        </div>
+      </div>
+
+
+
+      <div class="row" id="training" style="padding-top: 150px">
+        <div class="col-md-12">
+          <h2>Training Details</h2>
+        </div>
+      </div>
+
+
+      <div class="row" id="results" style="padding-top: 150px">
+        <div class="col-md-12">
+          <h2>Results</h2>
+        </div>
+      </div>
+
+
+      <div class="row" id="demo" style="padding-top: 150px">
+        <div class="col-md-12">
+          <h2>Confusion Matrix Demo</h2>
+          <h6>10 Users (24 User was too slow with the javascript)</h6>
+
+        </div>
+      </div>
+
+
+      <div class="row" id="filter" style="padding-top: 150px">
+        <div class="col-md-12">
+          <h2>Further Analysis</h2>
+        </div>
+      </div>
+
+
+      <div class="row" id="conclusion" style="padding-top: 150px">
+        <div class="col-md-12">
+          <h2>Conclusion</h2>
+        </div>
+      </div>
+
+
+
+    </div>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  </body>
+</html>
