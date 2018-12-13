@@ -128,7 +128,7 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="https://github.com/choffer1120/PhotographerID"><button class="btn btn-sm btn-outline-secondary">Source Code</button></a>
+            <a class="nav-link" href="https://github.com/choffer1120/PhotographerID/tree/master/SourceCode"><button class="btn btn-sm btn-outline-secondary">Source Code</button></a>
           </li>
 
 
@@ -167,7 +167,7 @@
                 Thus, we hope the relative success of our project highlights the ability for deep learning models to learn more complex image information then has been explored thus far.
                 <br /><br />
               </p>
-              <p style="color: rgb(100,100,100); font-size: 14px"><i>Completed by Cole Hoffer and Bibek Pandit</i></p>
+              <p style="color: rgb(100,100,100); font-size: 14px"><i>Completed by Cole Hoffer (choffer@mit.edu) and Bibek Pandit (bibek@mit.edu)</i></p>
           </div>
       </div>
 
@@ -302,6 +302,18 @@
         <div class="col-md-12">
           <h2>Results</h2>
         </div>
+
+        <div class="col-md-6">
+          <h5>10 User Validation Accuracy: <b>89.12%</b></h5>
+          <h5>10 User Top-3 Validation Accuracy: <b>96.90%</b></h5>
+          <img src="siteAssets/cm_best_10User.png" style="width:100%"  />
+        </div>
+
+        <div class="col-md-6">
+          <h5>24 User Validation Accuracy: <b>73.01%</b></h5>
+          <h5>24 User Top-3 Validation Accuracy: <b>88.09%</b></h5>
+          <img src="siteAssets/cm_best_res_24User.png" style="width:100%" />
+        </div>
       </div>
 
 
@@ -359,6 +371,56 @@
       <div class="row" id="filter" style="padding-top: 150px">
         <div class="col-md-12">
           <h2>Further Analysis</h2>
+
+
+          <div class="row" style="margin-bottom: 75px">
+            <div class="col-md-7">
+              <img src="siteAssets/sameUser.png"  style="width: 100%; margin-top: 40px;" />
+            </div>
+
+            <div class="col-md-4 offset-md-1">
+              <p>
+                One of the most promising findings we analyzed was the models predictive abilities on photographers who ocassionaly shot outside their normal subject matter.
+                For example, the photographer on the top of the graphic almost always shoots drone photography, but our model was able to correctly predict an image of theirs that was a typical landscape.
+                Additionally, the photographer on the bottom of the graphic almost always shoots traditional landscapes, but our model still predicted correcty on a close up wildlife image (even though we have other wildlife photographers in our training).
+                The fact our model could still make correct predictions across different subjects is strong evidence that the model was NOT dependent on the physical objects in the images, but that it was also able to incorporate style propertites in it's predictions.
+              </p>
+            </div>
+          </div>
+
+
+          <div class="row"  style="margin-bottom: 75px">
+            <div class="col-md-7">
+              <img src="siteAssets/image11.png"  style="width: 48%; margin-right:3%; float:left" />
+              <img src="siteAssets/image5.jpg"  style="width: 48%; float:left" />
+            </div>
+
+            <div class="col-md-4 offset-md-1">
+              <p>
+                The filters in the very first layer (left) seem to vary a lot among themselves and have discernible features which does not remain in the intermediate layer.
+                The intermediate layers (right) look all blurred up and hazy, but we feel there are deeper features the filters in deeper layers have learned that cannot necessarily be put in a form that the human eye can distinguish.
+              </p>
+            </div>
+          </div>
+
+
+          <div class="row"  style="margin-bottom: 75px">
+            <div class="col-md-7">
+              <img src="siteAssets/lastFilter.png"  style="width: 100%" />
+            </div>
+
+            <div class="col-md-4 offset-md-1">
+              <p>
+                These filters from the last convolutional layer are a nice visual representations of individual classes.
+                Class 5 (@loki) for example is a class which mostly has images of dogs and it’s clear that the filter (when visualized w.r.t class 5) shows dogs in different positions.
+                Similarly, class 7 has mostly landscape images and the filter is able to identify mountains which is present in many landscape photographs.
+                For other classes too, there are some distinct features, but they are more abstract which makes sense given a class might have different types of images, but has very similar styles.
+              </p>
+            </div>
+          </div>
+
+
+
         </div>
       </div>
 
